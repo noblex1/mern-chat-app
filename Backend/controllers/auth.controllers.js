@@ -1,18 +1,21 @@
-export const signUp = async (requestAnimationFrame, res) => {
-    const {userName, email, password, avatar} = req.body;
+import bcrypt from 'bcrypt'
+import userModel from '../models/user.model.js';
+
+export const signUp = async (req, res) => {
+    const {username, email, password, avatar} = req.body;
     try{
         //Validate data
-        if (!userName || !email || !password){
+        if (!username || !email || !password){
             return res.status(400).json({message: "Please fill all fields"})
         }
 
         //Validate password length
-        if(password.length){
+        if(password.length < 6){
             return res.status(400).json({message: "Password must be at least 6 characters"})
         }
 
         //Encrypt the password using bycrypt
-        const salt = await bcrypt.genSalt(10):
+        const salt = await bcrypt.genSalt(10)
         const hashPassword = await bcrypt.hash(password, salt);
 
         if (!hashPassword){
@@ -22,14 +25,14 @@ export const signUp = async (requestAnimationFrame, res) => {
         }
 
         //check if user exist already
-        const existingUser = await UserModel.findOne({ email });
+        const existingUser = await userModel.findOne({ email });
         if (existingUser) {
             return res.status(400).json({message: 'User already exists'});
         }
 
         //create new user
         const newUser = new userModel({
-            userName,
+            username,
             email,
             password: hashPassword,
             avatar
@@ -41,7 +44,7 @@ export const signUp = async (requestAnimationFrame, res) => {
             message: "User created successfully",
             user: {
                 id: newUser._id,
-                userName: userName.userName,
+                userName: newUser.username,
                 email: newUser.email,
                 avatar: newUser.avatar
 

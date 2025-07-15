@@ -1,6 +1,5 @@
 // Import mongoose
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
 // Define the structure for user data
 const userSchema = new mongoose.Schema({
   username: {
@@ -35,5 +34,5 @@ const userSchema = new mongoose.Schema({
 });
 
 // Create and export the User model
-module.exports = mongoose.model('User', userSchema);
+const userModel = mongoose.model('User', userSchema);
 export default userModel;
