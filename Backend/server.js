@@ -1,27 +1,48 @@
-import dotenv from 'dotenv';
+// Import required packages
 import express from 'express';
+import mongoose from 'mongoose';
 import cors from 'cors';
-import connectDB from './config/db.js';
-import authRouter from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 
+// Import routes
+import authRoutes from './routes/auth.route.js';
 
+// Load environment variables
 dotenv.config();
 
+// Create Express application
 const app = express();
 
-// Middleware - code that runs before our routes
-app.use(express.json()); // Allows server to understand JSON data
-app.use(cors("*")); // Allows frontend to communicate with backend
+// Middleware
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 
-app.get('/', (req, res) =>{
-    res.send('API is running....')
+// Get port from environment or use 5000
+const PORT = process.env.PORT || 5000;
+
+// Connect to MongoDB database
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('✅ Connected to MongoDB database');
+})
+.catch((error) => {
+  console.error('❌ Database connection error:', error);
 });
 
-app.use("/api/auth", authRouter)
+// Routes
+app.get('/', (req, res) => {
+  res.send('Chat Server is Running and Connected to Database!');
+});
 
-const PORT = process.env.PORT || 8000
+// Use auth routes - all auth routes will start with /api/auth
+app.use('/api/auth', authRoutes);
 
-app.listen(PORT, () =>{
-    console.log(`Server is running on ${PORT}`);
-    connectDB();
-})
+// Start the server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
