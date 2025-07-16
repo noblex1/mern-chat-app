@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import authRouter from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';
 
 
 dotenv.config();
@@ -12,6 +13,7 @@ const app = express();
 // Middleware - code that runs before our routes
 app.use(express.json()); // Allows server to understand JSON data
 app.use(cors("*")); // Allows frontend to communicate with backend
+app.use(cookieParser()); // Allows server to parse cookies
 
 app.get('/', (req, res) =>{
     res.send('API is running....')

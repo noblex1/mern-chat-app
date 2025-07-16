@@ -1,10 +1,22 @@
 import express from 'express';
-import { signIn, signUp } from '../controllers/auth.controllers.js';
+import {
+  signUp,
+  signIn,
+  signOut,        // Renamed from signOut
+  getMe,
+  updateProfile
+} from '../controllers/auth.controllers.js';
+import auth from '../middleware/auth.middleware.js';
 
 const authRouter = express.Router();
 
-authRouter.post('/signUp', signUp)
+// Public routes
+authRouter.post('/signUp', signUp);
+authRouter.post('/signIn', signIn);
 
-authRouter.post('/signIn', signIn)
+// Protected routes
+authRouter.post('/signOut', auth, signOut);
+authRouter.get('/me', auth, getMe);
+authRouter.put('/profile', auth, updateProfile);
 
 export default authRouter;
