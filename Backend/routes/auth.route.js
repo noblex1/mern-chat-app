@@ -17,6 +17,6 @@ authRouter.post('/signIn', signIn);
 // Protected routes
 authRouter.post('/signOut', auth, signOut);
 authRouter.get('/me', auth, getMe);
-authRouter.put('/profile', auth, updateProfile);
+authRouter.put('/updateProfile', auth, updateProfile);
 
 export default authRouter;

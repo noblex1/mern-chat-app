@@ -152,6 +152,7 @@ export const getMe = async (req, res) => {
 
 // Update User Profile
 export const updateProfile = async (req, res) => {
+  
   const { username, email, avatar } = req.body;
 
   try {
