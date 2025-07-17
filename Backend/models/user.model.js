@@ -1,36 +1,67 @@
 // Import mongoose
 import mongoose from "mongoose";
+
 // Define the structure for user data
 const userSchema = new mongoose.Schema({
   username: {
-    type: String,        // Must be text
-    required: true,      // Must be provided
-    unique: true,        // No two users can have same username
-    trim: true,          // Removes extra spaces
-    minlength: 3,        // At least 3 characters
-    maxlength: 20        // At most 20 characters
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    minlength: 3,
+    maxlength: 20
   },
   email: {
     type: String,
     required: true,
-    unique: true,        // No two users can have same email
-    lowercase: true      // Converts to lowercase
+    unique: true,
+    lowercase: true
   },
   password: {
     type: String,
     required: true,
-    minlength: 6         // At least 6 characters
+    minlength: 6
   },
   avatar: {
     type: String,
     default: 'https://via.placeholder.com/150/4A90E2/FFFFFF?text=User'
   },
   isOnline: {
-    type: Boolean,       // true or false
-    default: false       // New users start offline
+    type: Boolean,
+    default: false
+  },
+
+  // ✅ Correct placement of location
+  location: {
+    country: {
+      type: String,
+      default: ''
+    },
+    city: {
+      type: String,
+      default: ''
+    },
+    houseAddress: {
+      type: String,
+      default: ''
+    }
+  },
+
+  // ✅ Relationship status
+  relationshipStatus: {
+    type: String,
+    enum: ['single', 'in a relationship', 'married', 'complicated', 'prefer not to say'],
+    default: 'single'
+  },
+
+  // ✅ Date of birth
+  dateOfBirth: {
+    type: Date,
+    required: [true, 'Date of birth is required']
   }
+
 }, {
-  timestamps: true       // Automatically adds createdAt and updatedAt
+  timestamps: true
 });
 
 // Create and export the User model

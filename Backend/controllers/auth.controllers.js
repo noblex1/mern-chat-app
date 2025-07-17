@@ -4,7 +4,7 @@ import generateJWT from '../lib/generateJWT.js';
 
 // Sign Up - Register New User
 export const signUp = async (req, res) => {
-  const { username, email, password, avatar } = req.body;
+  const { username, email, password, avatar} = req.body;
 
   try {
     if (!username || !email || !password) {
@@ -95,6 +95,32 @@ export const signIn = async (req, res) => {
         isOnline: user.isOnline
       }
     });
+    // 5️⃣ Create and save new user
+    const newUser = new userModel({
+      username,
+      email,
+      password: hashPassword,
+      avatar,
+      location: {
+        country: location?.country || "",
+        city: location?.city || "",
+        houseAddress: location?.houseAddress || ""
+      }
+    });
+
+    await newUser.save();
+
+    res.status(201).json({
+      message: "User created successfully",
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        avatar: newUser.avatar,
+        location: newUser.location
+      }
+    });
+
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({
@@ -104,6 +130,7 @@ export const signIn = async (req, res) => {
     });
   }
 };
+
 
 // Logout User
 export const signOut = async (req, res) => {
@@ -123,6 +150,7 @@ export const signOut = async (req, res) => {
     res.status(500).json({ message: 'Logout failed', error: error.message });
   }
 };
+
 
 // Get Authenticated User Info
 export const getMe = async (req, res) => {
@@ -153,13 +181,16 @@ export const getMe = async (req, res) => {
 // Update User Profile
 export const updateProfile = async (req, res) => {
   
-  const { username, email, avatar } = req.body;
+  const { username, email, avatar, location, relationshipStatus, dateOfBirth  } = req.body;
 
   try {
     const updateData = {};
     if (username) updateData.username = username;
     if (email) updateData.email = email;
     if (avatar) updateData.avatar = avatar;
+    if (location) updateData.location = location;
+    if (relationshipStatus) updateData.relationshipStatus = relationshipStatus;
+    if (dateOfBirth) updateData.dateOfBirth = dateOfBirth;
 
     const existingUser = await userModel.findOne({
       _id: { $ne: req.user._id },
