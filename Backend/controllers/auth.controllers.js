@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import userModel from '../models/user.model.js';
-import generateJWT from '../lib/generateJWT.js';
+import generateJWT from '../utils/generateJWT.js';
 
 // Sign Up - Register New User
 export const signUp = async (req, res) => {

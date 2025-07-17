@@ -57,7 +57,6 @@ const userSchema = new mongoose.Schema({
   // ✅ Date of birth
   dateOfBirth: {
     type: Date,
-    required: [true, 'Date of birth is required']
   }
 
 }, {
